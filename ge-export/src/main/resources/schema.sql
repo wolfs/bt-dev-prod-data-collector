@@ -1,0 +1,1 @@
+CREATE TABLE TIME_TO_FIRST_TASK(build_id VARCHAR(255), project VARCHAR(255), path_to_test_task VARCHAR(255), time_to_first_task DECIMAL);

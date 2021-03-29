@@ -20,7 +20,7 @@ fun determineRootProjectName(events: Collection<BuildEvent>): String? {
 private fun buildStartedAt(events: Collection<BuildEvent>) =
     events.find { it.eventType == "BuildStarted" }!!.timestamp
 
-fun timeToFirstTestTask(events: Collection<BuildEvent>): Duration? {
+fun timeToFirstTestTask(events: Collection<BuildEvent>): Pair<String, Duration>? {
     val buildStarted = buildStartedAt(events)
     val testTasksStarted = events
         .filter { it.eventType == "TaskStarted" && it.data?.stringProperty("className")?.endsWith("Test") ?: false }
@@ -30,7 +30,14 @@ fun timeToFirstTestTask(events: Collection<BuildEvent>): Duration? {
             val startedAfter = Duration.between(Instant.ofEpochMilli(buildStarted), startTime)
             TaskStarted(path, startedAfter)
         }
-    return testTasksStarted.minByOrNull(TaskStarted::startedAfter)?.startedAfter
+    return testTasksStarted.minByOrNull(TaskStarted::startedAfter)?.let { it.path to it.startedAfter }
+}
+
+fun tags(events: Collection<BuildEvent>): List<String> {
+    return events
+        .filter { it.eventType == "UserTag" }
+        .map { it.data?.stringProperty("tag")!! }
+
 }
 
 private fun Any.stringProperty(name: String): String? = (this as Map<*, *>)[name] as String?

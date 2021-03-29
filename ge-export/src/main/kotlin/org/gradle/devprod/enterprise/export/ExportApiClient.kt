@@ -5,6 +5,8 @@ import org.gradle.devprod.enterprise.export.configuration.GradleEnterpriseServer
 import org.gradle.devprod.enterprise.export.model.Build
 import org.gradle.devprod.enterprise.export.model.BuildEvent
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration
+import org.springframework.context.annotation.Bean
 import org.springframework.http.codec.ServerSentEvent
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -29,9 +31,8 @@ class ExportApiClient(
             )
 
     fun getEvents(build: Build): Flow<ServerSentEvent<BuildEvent>> = client.get()
-        .uri("/v1/build/${build.buildId}/events?eventTypes=BuildStarted,BuildFinished,TaskStarted,ProjectStructure")
+        .uri("/v1/build/${build.buildId}/events?eventTypes=BuildStarted,BuildFinished,TaskStarted,ProjectStructure,UserTag")
         .bearerAuth()
         .retrieve()
         .bodyToFlow()
-
 }
