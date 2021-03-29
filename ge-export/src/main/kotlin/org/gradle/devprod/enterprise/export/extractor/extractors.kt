@@ -31,7 +31,6 @@ object FirstTestTaskStart : Extractor<Pair<String, Instant>?>("TaskStarted") {
             }
         return testTasksStarted.minByOrNull { it.second }
     }
-
 }
 
 object Tags : Extractor<Set<String>>("UserTag") {
@@ -39,5 +38,12 @@ object Tags : Extractor<Set<String>>("UserTag") {
         events.map { it.data?.stringProperty("tag")!! }.toSet()
 
 }
+
+object BuildAgent : Extractor<Agent>("BuildAgent") {
+    override fun extract(events: Iterable<BuildEvent>): Agent =
+        events.first().data!!.let { Agent(it.stringProperty("localHostname"), it.stringProperty("username")) }
+}
+
+data class Agent(val host: String?, val user: String?)
 
 private fun Any.stringProperty(name: String): String? = (this as Map<*, *>)[name] as String?

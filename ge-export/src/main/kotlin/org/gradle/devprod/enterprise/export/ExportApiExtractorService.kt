@@ -1,10 +1,10 @@
 package org.gradle.devprod.enterprise.export
 
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.toList
+import org.gradle.devprod.enterprise.export.extractor.BuildAgent
 import org.gradle.devprod.enterprise.export.extractor.BuildFinished
 import org.gradle.devprod.enterprise.export.extractor.BuildStarted
 import org.gradle.devprod.enterprise.export.extractor.Extractor
@@ -44,7 +44,7 @@ class ExportApiExtractorService(
     private suspend fun persistToDatabase(build: Build) {
         val existing = create.fetchAny(Tables.BUILD, Tables.BUILD.BUILD_ID.eq(build.buildId))
         if (existing == null) {
-            val extractors = listOf(BuildStarted, BuildFinished, FirstTestTaskStart, Tags, RootProjectNames)
+            val extractors = listOf(BuildStarted, BuildFinished, FirstTestTaskStart, Tags, RootProjectNames, BuildAgent)
             val events: Map<String?, List<BuildEvent>> = exportApiClient.getEvents(build, extractors.map(Extractor<*>::eventType))
                 .map { it.data()!! }
                 .toList()
@@ -55,6 +55,7 @@ class ExportApiExtractorService(
             val rootProjectName = RootProjectNames.extractFrom(events).firstOrNull { !it.startsWith("build-logic") }
             val firstTestTaskStart = FirstTestTaskStart.extractFrom(events)
             val timeToFirstTestTask = firstTestTaskStart?.let { Duration.between(buildStarted, it.second) }
+            val agent = BuildAgent.extractFrom(events)
             val tags = Tags.extractFrom(events)
             println("Duration of build ${build.buildId} for $rootProjectName is ${buildTime.format()}, first test task started after ${timeToFirstTestTask?.format()}")
 
@@ -64,6 +65,8 @@ class ExportApiExtractorService(
             record.timeToFirstTestTask = timeToFirstTestTask?.toMillis()
             record.pathToFirstTestTask = firstTestTaskStart?.first
             record.rootProject = rootProjectName
+            record.user = agent.user
+            record.host = agent.host
             record.store()
 
             tags.forEach { tag ->
@@ -74,5 +77,6 @@ class ExportApiExtractorService(
             }
         }
     }
-
 }
+
+private fun Duration.format() = "${toMinutes()}:${String.format("%02d", toSecondsPart())} min"
