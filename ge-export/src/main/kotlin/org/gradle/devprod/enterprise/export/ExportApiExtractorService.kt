@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -41,7 +42,7 @@ class ExportApiExtractorService(
             .map(this::persistToDatabase)
 
     private suspend fun persistToDatabase(build: Build) {
-        val existing = create.fetchAny(Tables.TIME_TO_FIRST_TASK, Tables.TIME_TO_FIRST_TASK.BUILD_ID.eq(build.buildId))
+        val existing = create.fetchAny(Tables.BUILD, Tables.BUILD.BUILD_ID.eq(build.buildId))
         if (existing == null) {
             val extractors = listOf(BuildStarted, BuildFinished, FirstTestTaskStart, Tags, RootProjectNames)
             val events: Map<String?, List<BuildEvent>> = exportApiClient.getEvents(build, extractors.map(Extractor<*>::eventType))
@@ -57,12 +58,12 @@ class ExportApiExtractorService(
             val tags = Tags.extractFrom(events)
             println("Duration of build ${build.buildId} for $rootProjectName is ${buildTime.format()}, first test task started after ${timeToFirstTestTask?.format()}")
 
-            val record = create.newRecord(Tables.TIME_TO_FIRST_TASK)
+            val record = create.newRecord(Tables.BUILD)
             record.buildId = build.buildId
-            record.buildStart = LocalDateTime.ofInstant(Instant.ofEpochMilli(build.timestamp), ZoneId.systemDefault())
-            record.timeToFirstTask = timeToFirstTestTask?.toMillis()
-            record.pathToTestTask = firstTestTaskStart?.first
-            record.project = rootProjectName
+            record.buildStart = OffsetDateTime.ofInstant(Instant.ofEpochMilli(build.timestamp), ZoneId.systemDefault())
+            record.timeToFirstTestTask = timeToFirstTestTask?.toMillis()
+            record.pathToFirstTestTask = firstTestTaskStart?.first
+            record.rootProject = rootProjectName
             record.store()
 
             tags.forEach { tag ->

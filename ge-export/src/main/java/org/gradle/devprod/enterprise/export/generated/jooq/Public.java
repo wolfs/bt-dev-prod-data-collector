@@ -4,14 +4,14 @@
 package org.gradle.devprod.enterprise.export.generated.jooq;
 
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.gradle.devprod.enterprise.export.generated.jooq.tables.Build;
 import org.gradle.devprod.enterprise.export.generated.jooq.tables.Tags;
-import org.gradle.devprod.enterprise.export.generated.jooq.tables.TimeToFirstTask;
 import org.jooq.Catalog;
 import org.jooq.Table;
 import org.jooq.impl.SchemaImpl;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 /**
@@ -20,7 +20,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Public extends SchemaImpl {
 
-    private static final long serialVersionUID = -1672814345;
+    private static final long serialVersionUID = 166296569;
 
     /**
      * The reference instance of <code>public</code>
@@ -28,14 +28,14 @@ public class Public extends SchemaImpl {
     public static final Public PUBLIC = new Public();
 
     /**
+     * The table <code>public.build</code>.
+     */
+    public final Build BUILD = Build.BUILD;
+
+    /**
      * The table <code>public.tags</code>.
      */
     public final Tags TAGS = Tags.TAGS;
-
-    /**
-     * The table <code>public.time_to_first_task</code>.
-     */
-    public final TimeToFirstTask TIME_TO_FIRST_TASK = TimeToFirstTask.TIME_TO_FIRST_TASK;
 
     /**
      * No further instances allowed
@@ -53,7 +53,7 @@ public class Public extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
-            Tags.TAGS,
-            TimeToFirstTask.TIME_TO_FIRST_TASK);
+            Build.BUILD,
+            Tags.TAGS);
     }
 }

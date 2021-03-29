@@ -4,8 +4,8 @@
 package org.gradle.devprod.enterprise.export.generated.jooq;
 
 
+import org.gradle.devprod.enterprise.export.generated.jooq.tables.Build;
 import org.gradle.devprod.enterprise.export.generated.jooq.tables.Tags;
-import org.gradle.devprod.enterprise.export.generated.jooq.tables.TimeToFirstTask;
 
 
 /**
@@ -15,12 +15,12 @@ import org.gradle.devprod.enterprise.export.generated.jooq.tables.TimeToFirstTas
 public class Tables {
 
     /**
+     * The table <code>public.build</code>.
+     */
+    public static final Build BUILD = Build.BUILD;
+
+    /**
      * The table <code>public.tags</code>.
      */
     public static final Tags TAGS = Tags.TAGS;
-
-    /**
-     * The table <code>public.time_to_first_task</code>.
-     */
-    public static final TimeToFirstTask TIME_TO_FIRST_TASK = TimeToFirstTask.TIME_TO_FIRST_TASK;
 }
