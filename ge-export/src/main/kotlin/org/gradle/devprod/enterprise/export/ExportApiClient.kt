@@ -9,11 +9,12 @@ import org.springframework.boot.autoconfigure.jooq.JooqAutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.http.codec.ServerSentEvent
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToFlow
 import java.util.Base64
 
-@Component
+@Service
 class ExportApiClient(
     private val server: GradleEnterpriseServer
 ) {
