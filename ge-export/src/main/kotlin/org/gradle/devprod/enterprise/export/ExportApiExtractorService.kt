@@ -61,7 +61,8 @@ class ExportApiExtractorService(
 
             val record = create.newRecord(Tables.BUILD)
             record.buildId = build.buildId
-            record.buildStart = OffsetDateTime.ofInstant(Instant.ofEpochMilli(build.timestamp), ZoneId.systemDefault())
+            record.buildStart = OffsetDateTime.ofInstant(buildStarted, ZoneId.systemDefault())
+            record.buildFinish = OffsetDateTime.ofInstant(buildFinished, ZoneId.systemDefault())
             record.timeToFirstTestTask = timeToFirstTestTask?.toMillis()
             record.pathToFirstTestTask = firstTestTaskStart?.first
             record.rootProject = rootProjectName
