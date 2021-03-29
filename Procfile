@@ -1,1 +1,1 @@
-web: java -jar ge-export/build/libs/ge-export-0.0.1-SNAPSHOT.jar
+web: java -Xmx250M -jar ge-export/build/libs/ge-export-0.0.1-SNAPSHOT.jar
