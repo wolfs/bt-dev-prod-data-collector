@@ -1,5 +1,6 @@
 package org.gradle.devprod.enterprise.export
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -30,8 +31,7 @@ class ExportApiExtractorService(
     private
     val create: DSLContext
 ) {
-
-    fun streamToDatabase() =
+    fun streamToDatabase(): Flow<Unit> =
         exportApiClient.createEventStream()
             .onEach {
                 val data = it.data()
