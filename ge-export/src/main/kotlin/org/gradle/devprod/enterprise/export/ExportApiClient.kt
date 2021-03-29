@@ -30,8 +30,8 @@ class ExportApiClient(
                 "Bearer ${Base64.getEncoder().encodeToString(server.apiToken.toByteArray())}"
             )
 
-    fun getEvents(build: Build): Flow<ServerSentEvent<BuildEvent>> = client.get()
-        .uri("/v1/build/${build.buildId}/events?eventTypes=BuildStarted,BuildFinished,TaskStarted,ProjectStructure,UserTag")
+    fun getEvents(build: Build, events: List<String>): Flow<ServerSentEvent<BuildEvent>> = client.get()
+        .uri("/v1/build/${build.buildId}/events?eventTypes=${events.joinToString(",")}")
         .bearerAuth()
         .retrieve()
         .bodyToFlow()
