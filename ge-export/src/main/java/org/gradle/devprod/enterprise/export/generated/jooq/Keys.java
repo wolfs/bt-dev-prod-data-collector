@@ -30,25 +30,25 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<BuildRecord> TIME_TO_FIRST_TASK_PK = UniqueKeys0.TIME_TO_FIRST_TASK_PK;
+    public static final UniqueKey<BuildRecord> BUILD_PK = UniqueKeys0.BUILD_PK;
     public static final UniqueKey<TagsRecord> TAGS_PK = UniqueKeys0.TAGS_PK;
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<TagsRecord, BuildRecord> TAGS__TAGS_TIME_TO_FIRST_TASK_FK = ForeignKeys0.TAGS__TAGS_TIME_TO_FIRST_TASK_FK;
+    public static final ForeignKey<TagsRecord, BuildRecord> TAGS__TAGS_BUILD_FK = ForeignKeys0.TAGS__TAGS_BUILD_FK;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
     // -------------------------------------------------------------------------
 
     private static class UniqueKeys0 {
-        public static final UniqueKey<BuildRecord> TIME_TO_FIRST_TASK_PK = Internal.createUniqueKey(Build.BUILD, "time_to_first_task_pk", new TableField[] { Build.BUILD.BUILD_ID }, true);
+        public static final UniqueKey<BuildRecord> BUILD_PK = Internal.createUniqueKey(Build.BUILD, "build_pk", new TableField[] { Build.BUILD.BUILD_ID }, true);
         public static final UniqueKey<TagsRecord> TAGS_PK = Internal.createUniqueKey(Tags.TAGS, "tags_pk", new TableField[] { Tags.TAGS.BUILD_ID, Tags.TAGS.TAG_NAME }, true);
     }
 
     private static class ForeignKeys0 {
-        public static final ForeignKey<TagsRecord, BuildRecord> TAGS__TAGS_TIME_TO_FIRST_TASK_FK = Internal.createForeignKey(Keys.TIME_TO_FIRST_TASK_PK, Tags.TAGS, "tags_time_to_first_task_fk", new TableField[] { Tags.TAGS.BUILD_ID }, true);
+        public static final ForeignKey<TagsRecord, BuildRecord> TAGS__TAGS_BUILD_FK = Internal.createForeignKey(Keys.BUILD_PK, Tags.TAGS, "tags_build_fk", new TableField[] { Tags.TAGS.BUILD_ID }, true);
     }
 }

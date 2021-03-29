@@ -22,12 +22,18 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.boot:spring-boot-starter-jooq")
+
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+	implementation("org.flywaydb:flyway-core:7.7.1")
+
 	runtimeOnly("org.postgresql:postgresql")
 
 	kapt("org.springframework.boot:spring-boot-configuration-processor")
@@ -54,6 +60,7 @@ jooq {
 					database.apply {
 						name = "org.jooq.meta.postgres.PostgresDatabase"
 						inputSchema = "public"
+						excludes = "flyway_schema_history"
 					}
 					target.apply {
 						packageName = "org.gradle.devprod.enterprise.export.generated.jooq"

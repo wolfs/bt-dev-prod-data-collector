@@ -23,6 +23,10 @@ import org.springframework.context.annotation.Bean
 
 fun main(args: Array<String>) {
 	val context = runApplication<ExportDataFromGradleEnterpriseApplication>(*args)
+
+	val flywayService = context.getBean<FlywayMigrationService>()
+	flywayService.migrateDatabase()
+
 	val extractor = context.getBean<ExportApiExtractorService>()
 	extractor.streamToDatabase().launchIn(CoroutineScope(Dispatchers.IO))
 }

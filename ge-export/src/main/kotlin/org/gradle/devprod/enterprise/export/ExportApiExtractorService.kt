@@ -65,7 +65,7 @@ class ExportApiExtractorService(
             record.timeToFirstTestTask = timeToFirstTestTask?.toMillis()
             record.pathToFirstTestTask = firstTestTaskStart?.first
             record.rootProject = rootProjectName
-            record.user = agent.user
+            record.username = agent.user
             record.host = agent.host
             record.store()
 
